@@ -102,6 +102,7 @@ export function menuItem(title: Html, href: string) {
 export function pre(children: Html) {
   return html`<pre
     class="p-3 rounded bg-light"
+    style="letter-spacing: 0;"
     wrap
   ><code>${children}</code></pre>`
 }
