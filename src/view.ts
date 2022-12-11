@@ -14,7 +14,7 @@ interface ViewContext {
   add: (v: Html) => void
 
   /** Add a log message. This will be added to the end of the page for diagnostics. */
-  log: (...p: any[]) => void
+  debug: (...p: any[]) => void
 
   /** Redirect to another page. Should be used with the `return` keyword. */
   redirect: (p: string) => void
@@ -34,7 +34,11 @@ export function view(f: (context: ViewContext) => Promise<Html | void>) {
       },
       title: request.routerMethod + ' ' + request.routerPath,
       add: (v: Html) => output.push(v),
-      log: (...a: any[]) => log.push(format(...a)),
+      debug: (...a: any[]) => {
+        const str = format(...a)
+        log.push(str)
+        request.log.debug(str)
+      },
     }
     try {
       output.push(html`${await f(context)}`.toHtml())
