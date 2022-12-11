@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@dtinth/encrypted": "^0.3.1",
     "@fastify/basic-auth": "^5.0.0",
     "@fastify/cors": "^8.2.0",
     "@fastify/formbody": "^7.4.0",
@@ -7,7 +8,8 @@
     "@types/node": "^18.11.13",
     "dotenv": "^16.0.3",
     "fastify": "^4.10.2",
-    "lodash-es": "^4.17.21"
+    "lodash-es": "^4.17.21",
+    "tagged-hypertext": "^1.0.1"
   },
   "devDependencies": {
     "@tsconfig/node18": "^1.0.1",

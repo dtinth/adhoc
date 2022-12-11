@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@dtinth/encrypted': ^0.3.1
   '@fastify/basic-auth': ^5.0.0
   '@fastify/cors': ^8.2.0
   '@fastify/formbody': ^7.4.0
@@ -11,10 +12,12 @@ specifiers:
   dotenv: ^16.0.3
   fastify: ^4.10.2
   lodash-es: ^4.17.21
+  tagged-hypertext: ^1.0.1
   tsx: ^3.12.1
   typescript: ^4.9.4
 
 dependencies:
+  '@dtinth/encrypted': 0.3.1
   '@fastify/basic-auth': 5.0.0
   '@fastify/cors': 8.2.0
   '@fastify/formbody': 7.4.0
@@ -23,6 +26,7 @@ dependencies:
   dotenv: 16.0.3
   fastify: 4.10.2
   lodash-es: 4.17.21
+  tagged-hypertext: 1.0.1
 
 devDependencies:
   '@tsconfig/node18': 1.0.1
@@ -31,6 +35,15 @@ devDependencies:
   typescript: 4.9.4
 
 packages:
+
+  /@dtinth/encrypted/0.3.1:
+    resolution: {integrity: sha512-BMxQVEvSVAz1Es3JA99GkHTHRJRJuYDZ9VVYvXOcEUjDUBdQ1DzHZonqzp/xrWP4u9mfNHLV/6SacqJgfF7ENA==}
+    hasBin: true
+    dependencies:
+      '@types/node': 18.11.13
+      dotenv: 8.6.0
+      tweetnacl: 1.0.3
+    dev: false
 
   /@esbuild-kit/cjs-loader/2.4.1:
     resolution: {integrity: sha512-lhc/XLith28QdW0HpHZvZKkorWgmCNT7sVelMHDj3HFdTfdqkwEKvT+aXVQtNAmCC39VJhunDkWhONWB7335mg==}
@@ -285,6 +298,11 @@ packages:
   /dotenv/16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
     engines: {node: '>=12'}
+    dev: false
+
+  /dotenv/8.6.0:
+    resolution: {integrity: sha512-IrPdXQsk2BbzvCBGBOTmmSH5SodmqZNt4ERAZDmW4CT+tL8VtvinqywuANaFu4bOMWki16nqf0e4oC0QIaDr/g==}
+    engines: {node: '>=10'}
     dev: false
 
   /ee-first/1.1.1:
@@ -684,6 +702,10 @@ packages:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
     dev: false
 
+  /lodash.escape/4.0.1:
+    resolution: {integrity: sha512-nXEOnb/jK9g0DYMr1/Xvq6l5xMD7GDG55+GSYIYmS0G4tBk/hURD4JR9WCavs04t33WmJx9kCyp9vJ+mr4BOUw==}
+    dev: false
+
   /lru-cache/6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
@@ -931,6 +953,12 @@ packages:
     engines: {node: '>= 0.8'}
     dev: false
 
+  /tagged-hypertext/1.0.1:
+    resolution: {integrity: sha512-0e1T9Tj/KoedGwZbKrxnavKYDGdS3OAInSKdWPJ/VMhNvAK5N7LY9S20pVJE8MhM5XWEWLPkooA21H/U5A4Rpg==}
+    dependencies:
+      lodash.escape: 4.0.1
+    dev: false
+
   /thread-stream/2.2.0:
     resolution: {integrity: sha512-rUkv4/fnb4rqy/gGy7VuqK6wE1+1DOCOWy4RMeaV69ZHMP11tQKZvZSip1yTgrKCMZzEMcCL/bKfHvSfDHx+iQ==}
     dependencies:
@@ -957,6 +985,10 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
+
+  /tweetnacl/1.0.3:
+    resolution: {integrity: sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==}
+    dev: false
 
   /typescript/4.9.4:
     resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}
