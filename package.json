@@ -4,7 +4,6 @@
     "@fastify/cors": "^8.2.0",
     "@fastify/formbody": "^7.4.0",
     "@types/node": "^18.11.13",
-    "axios": "^1.2.1",
     "dotenv": "^16.0.3",
     "fastify": "^4.10.2"
   },
