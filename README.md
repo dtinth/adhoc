@@ -10,4 +10,4 @@ Starter project optimized for building ad-hoc UI applications.
 
 ## Prerequisites
 
-You should be somewhat familiar with JavaScript, Bootstrap and Fastify.
+You should be somewhat familiar with JavaScript, Bootstrap and Fastify. This project tries to abstract as little as possible, so there’s less abstraction to learn and your code stays close to the underlying technology.
