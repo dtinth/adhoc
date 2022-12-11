@@ -20,11 +20,11 @@ dependencies:
   '@types/node': 18.11.13
   dotenv: 16.0.3
   fastify: 4.10.2
+  lodash-es: 4.17.21
 
 devDependencies:
   '@tsconfig/node18': 1.0.1
   '@types/lodash-es': 4.17.6
-  lodash-es: 4.17.21
   tsx: 3.12.1
   typescript: 4.9.4
 
@@ -563,7 +563,7 @@ packages:
 
   /lodash-es/4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
-    dev: true
+    dev: false
 
   /lru-cache/6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
