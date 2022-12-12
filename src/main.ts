@@ -23,6 +23,7 @@ const server = http.createServer(async (req, res) => {
   }
 })
 
-server.listen(18023, () => {
-  console.log('Server listening:', server.address())
+const port = 18023
+server.listen(port, '127.0.0.1', () => {
+  console.log(`==> http://localhost:${port}`)
 })
