@@ -27,9 +27,6 @@ Node.js 18. You should be somewhat familiar with JavaScript, Bootstrap and Fasti
 # Install dependencies
 pnpm install
 
-# Set up environment variables
-cp .env.example .env
-
 # Start the server
 pnpm start
 ```

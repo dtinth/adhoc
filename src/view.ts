@@ -11,7 +11,7 @@ interface ViewContext {
   title: string
 
   /** Display something on the page. */
-  add: (v: Html) => void
+  add: (...v: Html[]) => void
 
   /** Add a log message. This will be added to the end of the page for diagnostics. */
   debug: (...p: any[]) => void
@@ -39,7 +39,7 @@ export function view(f: (context: ViewContext) => Promise<Html | void>) {
         gone = true
       },
       title: request.routerMethod + ' ' + request.routerPath,
-      add: (v: Html) => output.push(v),
+      add: (...v: Html[]) => output.push(...v),
       debug: (...a: any[]) => {
         const str = format(...a)
         log.push(str)

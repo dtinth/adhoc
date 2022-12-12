@@ -1,18 +1,28 @@
-import 'dotenv/config'
+import './env'
 import http from 'http'
 import { createServer as createViteServer } from 'vite'
 
-const vitePromise = createViteServer({
-  server: { middlewareMode: true },
-  appType: 'custom',
-  build: { rollupOptions: { input: 'src/fastify.ts' } },
-})
+const getFastify = (() => {
+  if (process.env.EXPERIMENTAL_USE_VITE === 'true') {
+    const vitePromise = createViteServer({
+      server: { middlewareMode: true },
+      appType: 'custom',
+      build: { rollupOptions: { input: 'src/fastify.ts' } },
+    })
+    return async () => {
+      const vite = await vitePromise
+      const { fastifyPromise } = await vite.ssrLoadModule('/src/fastify.ts')
+      return fastifyPromise
+    }
+  } else {
+    const { fastifyPromise } = require('./fastify')
+    return async () => fastifyPromise
+  }
+})()
 
 const server = http.createServer(async (req, res) => {
   try {
-    const vite = await vitePromise
-    const { fastifyPromise } = await vite.ssrLoadModule('/src/fastify.ts')
-    const fastify = await fastifyPromise
+    const fastify = await getFastify()
     await fastify.ready()
     fastify.server.emit('request', req, res)
   } catch (error: any) {

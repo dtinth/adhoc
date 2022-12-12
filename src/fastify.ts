@@ -14,15 +14,19 @@ async function createApp() {
     },
   })
   await fastify.register(formBody, {})
-  await fastify.register(basicAuth, {
-    validate: validateBasicAuth,
-    authenticate: { realm: 'adhoc' },
-  })
+
+  if (process.env.BASIC_AUTH_PASSWORD) {
+    await fastify.register(basicAuth, {
+      validate: validateBasicAuth,
+      authenticate: { realm: 'adhoc' },
+    })
+    fastify.addHook('onRequest', fastify.basicAuth)
+  }
+
   await fastify.register(staticPlugin, {
     root: path.resolve('public'),
     prefix: '/public/',
   })
-  fastify.addHook('onRequest', fastify.basicAuth)
   await fastify.register(routes)
   return fastify
 }

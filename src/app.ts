@@ -83,7 +83,10 @@ export async function routes(fastify: FastifyInstance) {
     view(async (v) => {
       const text = v.requiredParam('text')
       const code = 'encrypted`' + encrypted.encrypt(text) + '`'
-      v.add(pre(code))
+      v.add(
+        p('You can use the following code in your app to access the text:'),
+        pre(code),
+      )
     }),
   )
 }
