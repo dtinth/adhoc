@@ -4,6 +4,8 @@ import { createServer as createViteServer } from 'vite'
 
 const getFastify = (() => {
   if (process.env.EXPERIMENTAL_USE_VITE === 'true') {
+    // Vite is currently behind a flag because source map is currently
+    // not working when doing SSR. https://github.com/vitejs/vite/issues/3288
     const vitePromise = createViteServer({
       server: { middlewareMode: true },
       appType: 'custom',

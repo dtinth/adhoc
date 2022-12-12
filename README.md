@@ -31,6 +31,6 @@ pnpm install
 pnpm start
 ```
 
-- Edit `src/app.ts`. The app is hot-reloaded when you change it. (Note: you need to restart the server if you change the `.env` file.)
+- Edit `src/app.ts`. The app is restarted when you change it.
 
 - Go to http://localhost:18023/ to see the app.
