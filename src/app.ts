@@ -1,5 +1,18 @@
+import Encrypted from '@dtinth/encrypted'
 import { FastifyInstance } from 'fastify'
-import { view, menu, menuItem, html } from './view'
+import {
+  view,
+  menu,
+  menuItem,
+  html,
+  formPost,
+  inputText,
+  p,
+  buttons,
+  pre,
+} from './view'
+
+const encrypted = Encrypted()
 
 export async function routes(fastify: FastifyInstance) {
   fastify.get(
@@ -15,8 +28,9 @@ export async function routes(fastify: FastifyInstance) {
       v.add('This is a demo.')
       v.add(
         menu([
-          menuItem('Get a random quote', '/quote'),
-          menuItem('Test a route that does not work', '/crash'),
+          menuItem('/quote', 'Get a random quote'),
+          menuItem('/encrypt', 'Encrypt some text (form demo)'),
+          menuItem('/crash', 'Test a route that does not work'),
         ]),
       )
     }),
@@ -48,6 +62,28 @@ export async function routes(fastify: FastifyInstance) {
         'This can be useful when debugging a crashed route!',
       )
       throw new Error('This is an example error.')
+    }),
+  )
+
+  fastify.get(
+    '/encrypt',
+    view(async (v) => {
+      v.add(
+        formPost('/encrypt', [
+          p('Enter the text that you want to encrypt'),
+          inputText('text'),
+          buttons(),
+        ]),
+      )
+    }),
+  )
+
+  fastify.post(
+    '/encrypt',
+    view(async (v) => {
+      const text = v.requiredParam('text')
+      const code = 'encrypted`' + encrypted.encrypt(text) + '`'
+      v.add(pre(code))
     }),
   )
 }

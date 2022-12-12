@@ -18,6 +18,12 @@ interface ViewContext {
 
   /** Redirect to another page. Should be used with the `return` keyword. */
   redirect: (p: string) => void
+
+  /** Get the parameter from `params`, `body`, and `query` (in that order). */
+  param: (name: string) => string | undefined
+
+  /** Get the parameter from `params`, `body`, and `query` (in that order). Throws an error if not found. */
+  requiredParam: (name: string) => string
 }
 
 export function view(f: (context: ViewContext) => Promise<Html | void>) {
@@ -38,6 +44,21 @@ export function view(f: (context: ViewContext) => Promise<Html | void>) {
         const str = format(...a)
         log.push(str)
         request.log.debug(str)
+      },
+      param: (name) => {
+        return (
+          (request.params as any)[name] ||
+          ((request.body as any) || {})[name] ||
+          (request.query as any)[name] ||
+          undefined
+        )
+      },
+      requiredParam: (name) => {
+        const value = context.param(name)
+        if (value === undefined) {
+          throw new Error(`Missing parameter: ${name}`)
+        }
+        return value
       },
     }
     try {
@@ -83,20 +104,24 @@ export function view(f: (context: ViewContext) => Promise<Html | void>) {
   }
 }
 
-export function menu(items: Html) {
-  return html`<div class="list-group my-4">${items}</div>`
+export function menu(children: Html) {
+  return html`<div class="list-group my-4">${children}</div>`
 }
 
-export function menuItem(title: Html, href: string) {
+export function menuItem(href: string, children: Html) {
   return html`<a
     href="${href}"
     class="list-group-item list-group-item-action d-flex"
   >
-    <span style="flex: 1 0 0">${title}</span>
+    <span style="flex: 1 0 0">${children}</span>
     <span class="d-flex align-self-center" style="flex: none"
       ><iconify-icon icon="codicon:chevron-right"></iconify-icon
     ></span>
   </a>`
+}
+
+export function p(children: Html) {
+  return html`<p>${children}</p>`
 }
 
 export function pre(children: Html) {
@@ -105,4 +130,25 @@ export function pre(children: Html) {
     style="letter-spacing: 0;"
     wrap
   ><code>${children}</code></pre>`
+}
+
+export function formPost(action: string, children: Html) {
+  return html`<form action="${action}" method="post">${children}</form>`
+}
+
+export function inputText(name: string, label: Html = name) {
+  return html`<div class="mb-3">
+    <label for="${name}" class="form-label fw-bold text-muted">${label}</label>
+    <input type="text" class="form-control" id="${name}" name="${name}" />
+  </div>`
+}
+
+export function buttons(children: Html = submitButton()) {
+  return html`<div class="d-flex gap-2">${children}</div>`
+}
+
+export function submitButton(children: Html = 'Submit form') {
+  return html`<button type="submit" class="btn btn-primary">
+    ${children}
+  </button>`
 }

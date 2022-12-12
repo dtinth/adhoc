@@ -28,11 +28,12 @@ Node.js 18. You should be somewhat familiar with JavaScript, Bootstrap and Fasti
 pnpm install
 
 # Set up environment variables
-echo BASIC_AUTH_PASSWORD=hunter2 > .env
+cp .env.example .env
 
 # Start the server
 pnpm start
 ```
 
 - Edit `src/app.ts`. The app is hot-reloaded when you change it. (Note: you need to restart the server if you change the `.env` file.)
+
 - Go to http://localhost:18023/ to see the app.
