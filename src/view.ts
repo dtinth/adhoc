@@ -69,10 +69,13 @@ export function view(f: (context: ViewContext) => Promise<Html | void>) {
 
     if (log.length > 0) {
       output.push(
-        html`<div class="mt-5 mb-2 text-muted"><strong>Logs</strong></div>`,
+        html`<div class="mt-5 mb-2 text-muted">
+            ${icon('codicon:output')} <strong>Logs</strong>
+          </div>
+          <div class="fs-6">${log.map((l) => pre(l))}</div>`,
       )
     }
-    output.push(log.map((l) => pre(l)))
+
     const outputHtml = html`<!DOCTYPE html>
       <html lang="en">
         <head>
@@ -115,9 +118,13 @@ export function menuItem(href: string, children: Html) {
   >
     <span style="flex: 1 0 0">${children}</span>
     <span class="d-flex align-self-center" style="flex: none"
-      ><iconify-icon icon="codicon:chevron-right"></iconify-icon
-    ></span>
+      >${icon('codicon:chevron-right')}</span
+    >
   </a>`
+}
+
+export function icon(name: string) {
+  return html`<iconify-icon icon="${name}" inline></iconify-icon>`
 }
 
 export function p(children: Html) {
