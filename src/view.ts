@@ -64,15 +64,15 @@ export function view(f: (context: ViewContext) => Promise<Html | void>) {
     try {
       output.push(html`${await f(context)}`.toHtml())
     } catch (error: any) {
-      output.push(pre(error.stack))
+      output.push(ui.pre(error.stack))
     }
 
     if (log.length > 0) {
       output.push(
         html`<div class="mt-5 mb-2 text-muted">
-            ${icon('codicon:output')} <strong>Logs</strong>
+            ${ui.icon('codicon:output')} <strong>Logs</strong>
           </div>
-          <div class="fs-6">${log.map((l) => pre(l))}</div>`,
+          <div class="fs-6">${log.map((l) => ui.pre(l))}</div>`,
       )
     }
 
@@ -107,55 +107,59 @@ export function view(f: (context: ViewContext) => Promise<Html | void>) {
   }
 }
 
-export function menu(children: Html) {
-  return html`<div class="list-group my-4">${children}</div>`
-}
+export namespace ui {
+  export function menu(children: Html) {
+    return html`<div class="list-group my-4">${children}</div>`
+  }
 
-export function menuItem(href: string, children: Html) {
-  return html`<a
-    href="${href}"
-    class="list-group-item list-group-item-action d-flex"
-  >
-    <span style="flex: 1 0 0">${children}</span>
-    <span class="d-flex align-self-center" style="flex: none"
-      >${icon('codicon:chevron-right')}</span
+  export function menuItem(href: string, children: Html) {
+    return html`<a
+      href="${href}"
+      class="list-group-item list-group-item-action d-flex"
     >
-  </a>`
-}
+      <span style="flex: 1 0 0">${children}</span>
+      <span class="d-flex align-self-center" style="flex: none"
+        >${icon('codicon:chevron-right')}</span
+      >
+    </a>`
+  }
 
-export function icon(name: string) {
-  return html`<iconify-icon icon="${name}" inline></iconify-icon>`
-}
+  export function icon(name: string) {
+    return html`<iconify-icon icon="${name}" inline></iconify-icon>`
+  }
 
-export function p(children: Html) {
-  return html`<p>${children}</p>`
-}
+  export function p(children: Html) {
+    return html`<p>${children}</p>`
+  }
 
-export function pre(children: Html) {
-  return html`<pre
-    class="p-3 rounded bg-light"
-    style="letter-spacing: 0;"
-    wrap
-  ><code>${children}</code></pre>`
-}
+  export function pre(children: Html) {
+    return html`<pre
+      class="p-3 rounded bg-light"
+      style="letter-spacing: 0;"
+      wrap
+    ><code>${children}</code></pre>`
+  }
 
-export function formPost(action: string, children: Html) {
-  return html`<form action="${action}" method="post">${children}</form>`
-}
+  export function formPost(action: string, children: Html) {
+    return html`<form action="${action}" method="post">${children}</form>`
+  }
 
-export function inputText(name: string, label: Html = name) {
-  return html`<div class="mb-3">
-    <label for="${name}" class="form-label fw-bold text-muted">${label}</label>
-    <input type="text" class="form-control" id="${name}" name="${name}" />
-  </div>`
-}
+  export function inputText(name: string, label: Html = name) {
+    return html`<div class="mb-3">
+      <label for="${name}" class="form-label fw-bold text-muted"
+        >${label}</label
+      >
+      <input type="text" class="form-control" id="${name}" name="${name}" />
+    </div>`
+  }
 
-export function buttons(children: Html = submitButton()) {
-  return html`<div class="d-flex gap-2">${children}</div>`
-}
+  export function buttons(children: Html = submitButton()) {
+    return html`<div class="d-flex gap-2">${children}</div>`
+  }
 
-export function submitButton(children: Html = 'Submit form') {
-  return html`<button type="submit" class="btn btn-primary">
-    ${children}
-  </button>`
+  export function submitButton(children: Html = 'Submit form') {
+    return html`<button type="submit" class="btn btn-primary">
+      ${children}
+    </button>`
+  }
 }

@@ -1,16 +1,6 @@
 import Encrypted from '@dtinth/encrypted'
 import { FastifyInstance } from 'fastify'
-import {
-  view,
-  menu,
-  menuItem,
-  html,
-  formPost,
-  inputText,
-  p,
-  buttons,
-  pre,
-} from './view'
+import { view, ui, html } from './view'
 
 const encrypted = Encrypted()
 
@@ -27,10 +17,10 @@ export async function routes(fastify: FastifyInstance) {
       v.add(html`<strong>Welcome. </strong>`)
       v.add('This is a demo.')
       v.add(
-        menu([
-          menuItem('/quote', 'Get a random quote'),
-          menuItem('/encrypt', 'Encrypt some text (form demo)'),
-          menuItem('/crash', 'Test a route that does not work'),
+        ui.menu([
+          ui.menuItem('/quote', 'Get a random quote'),
+          ui.menuItem('/encrypt', 'Encrypt some text (form demo)'),
+          ui.menuItem('/crash', 'Test a route that does not work'),
         ]),
       )
     }),
@@ -69,10 +59,10 @@ export async function routes(fastify: FastifyInstance) {
     '/encrypt',
     view(async (v) => {
       v.add(
-        formPost('/encrypt', [
-          p('Enter the text that you want to encrypt'),
-          inputText('text'),
-          buttons(),
+        ui.formPost('/encrypt', [
+          ui.p('Enter the text that you want to encrypt'),
+          ui.inputText('text'),
+          ui.buttons(),
         ]),
       )
     }),
@@ -84,8 +74,8 @@ export async function routes(fastify: FastifyInstance) {
       const text = v.requiredParam('text')
       const code = 'encrypted`' + encrypted.encrypt(text) + '`'
       v.add(
-        p('You can use the following code in your app to access the text:'),
-        pre(code),
+        ui.p('You can use the following code in your app to access the text:'),
+        ui.pre(code),
       )
     }),
   )
