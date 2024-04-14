@@ -1,20 +1,11 @@
-import { config } from 'dotenv'
-import { randomBytes } from 'crypto'
-import { existsSync, writeFileSync } from 'fs'
-
-if (!existsSync('.env')) {
-  const env = [
-    '# Add password here to protect app',
-    'BASIC_AUTH_PASSWORD=',
-    '',
-    '# Secret used to encrypt values',
-    'ENCRYPTION_SECRET=' + randomBytes(32).toString('base64'),
-  ].join('\n')
-
-  writeFileSync('.env', env)
-  console.log('==> Initialized `.env` file with these values:')
-  console.log(env)
-  console.log()
+export interface Env {
+  BASIC_AUTH_PASSWORD: string
 }
 
-config()
+export const envMap = new WeakMap<Request, Env>()
+
+export function getEnv(request: Request): Env {
+  const env = envMap.get(request)
+  if (!env) throw new Error('Unable to get environment for request')
+  return env
+}

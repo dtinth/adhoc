@@ -2,7 +2,7 @@
 
 Starter project optimized for building ad-hoc UI applications.
 
-- ~~Separate frontend and backend.~~ Render everything on the server-side. Embrace [server-driven UI](https://www.thoughtworks.com/en-th/radar/techniques/server-driven-ui).
+- ~~Separate frontend and backend.~~ Render everything on the server-side. Embrace [server-driven UI](https://www.thoughtworks.com/en-th/radar/techniques/server-driven-ui). This is so that any problems can be fixed on the server, and everyone will get the fix immediately without having to update the client-side app.
 
 - ~~Separate models, views, controllers.~~ Put all the logic in the endpoint so it’s easier to build and iterate. Views should be generic.
 
@@ -12,14 +12,14 @@ Starter project optimized for building ad-hoc UI applications.
 
 ## What’s in the box
 
-- [Fastify](https://www.fastify.io/) with logger configured.
+- [Cloudflare Workers](https://workers.cloudflare.com/) for running the app. When developing locally, [Wrangler](https://developers.cloudflare.com/workers/wrangler/) has built-in support for TypeScript and live reloading. When deploying to Cloudflare, it deploys in 3 seconds. Cloudflare Workers also has a generous free tier.
+- [ElysiaJS](https://elysiajs.com/) for a web framework with built-in request parsing and validation.
 - [Bootstrap](https://getbootstrap.com/) v5 with helpers for building UIs.
-- Request handler with built-in output buffering, error handling, and diagnostic tools.
-- View helpers for building menus and other UI components.
+- Custom view builder for building web page with menus and other UI components with error handling and diagnostic tools.
 
 ## Prerequisites
 
-Node.js 18. You should be somewhat familiar with JavaScript, Bootstrap and Fastify. This project tries to abstract as little as possible, so there’s less abstraction to learn and your code stays close to the underlying technology.
+[Wrangler](https://developers.cloudflare.com/workers/wrangler/). You should be somewhat familiar with JavaScript, Bootstrap and ElysiaJS. This project tries to abstract as little as possible, so there’s less abstraction to learn and your code stays close to the underlying technology.
 
 ## Getting started
 
@@ -33,17 +33,21 @@ pnpm start
 
 - Edit `src/app.ts`. The app is restarted when you change it.
 
-- Go to http://localhost:18023/ to see the app.
+- Go to http://localhost:8787/ to see the app.
 
 ## Deployment
 
-You can deploy this anywhere you can run Node.js.
+To deploy to Cloudflare, run:
 
-You could deploy this to a PaaS service like Heroku, Fly, or Railway. However, you’ll have to wait for a push/build/deploy cycle to see your changes. In situations where we have to improvise an app live at an event, many bugs are bound to happen, and we cannot afford to wait 2 minutes each time we fix a bug.
+```bash
+pnpm run deploy
+```
 
-In my case, I **run the app on my own laptop** and use a tunneling tool (e.g. Cloudflare Tunnel, ngrok, or localtunnel) to let people access it. This is the fastest way to react to feedback. In my case, I set up [Cloudflare Tunnel to my subdomain](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/routing-to-tunnel/). To let others developers help build the app, collaboration tools such as Visual Studio Live Share can be used. One downside is that when the laptop goes to sleep, the app stops working.
+If you don’t want to use Cloudflare, you can also run it on any system that can run Wrangler.
 
-Another possible approach is to **run the app on a VPS.** The Remote - SSH extension in Visual Studio Code can be used to connect to the VPS and edit the code. To let people access via HTTPS, [a reverse proxy can be easily set up using Caddy](https://notes.dt.in.th/CaddyReverseProxy). Alternatively, tunnel tools like Cloudflare Tunnel and ngrok can also be used.
+I sometimes run the app on my own laptop and use a tunneling tool (e.g. Cloudflare Tunnel, ngrok, or localtunnel) to let people access it. This is the fastest way to react to feedback. In my case, I set up [Cloudflare Tunnel to my subdomain](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/routing-to-tunnel/). To let others developers help build the app, collaboration tools such as Visual Studio Live Share can be used. One downside is that when the laptop goes to sleep, the app stops working.
+
+Another possible approach is to run the app on a VPS. The Remote - SSH extension in Visual Studio Code can be used to connect to the VPS and edit the code. To let people access via HTTPS, [a reverse proxy can be easily set up using Caddy](https://notes.dt.in.th/CaddyReverseProxy). Alternatively, tunnel tools like Cloudflare Tunnel and ngrok can also be used.
 
 It is important to note that ad-hoc apps that are developed in this way are not meant to be deployed to production and run unattended. While it’s being used, ideally there should be a developer who monitors the app, observes how it’s used, fixes bugs as they happen, and make improvements along the way. **Crashes and downtimes should be expected, and fallback processes should be put in place in case the app is unable to function.** Care should be taken to make the uptime as high as possible (but it’s not the primary goal), because if the app doesn’t work most of the time, then the fallback process will become more reliable, and the ad-hoc app will be useless.
 

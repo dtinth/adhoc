@@ -1,41 +1,27 @@
-import './env'
-import http from 'http'
-import { createServer as createViteServer } from 'vite'
+import { app } from './app'
+import { Env, envMap } from './env'
 
-const getFastify = (() => {
-  if (process.env.EXPERIMENTAL_USE_VITE === 'true') {
-    // Vite is currently behind a flag because source map is currently
-    // not working when doing SSR. https://github.com/vitejs/vite/issues/3288
-    const vitePromise = createViteServer({
-      server: { middlewareMode: true },
-      appType: 'custom',
-      build: { rollupOptions: { input: 'src/fastify.ts' } },
-    })
-    return async () => {
-      const vite = await vitePromise
-      const { fastifyPromise } = await vite.ssrLoadModule('/src/fastify.ts')
-      return fastifyPromise
+export default {
+  async fetch(
+    request: Request,
+    env: Env,
+    ctx: ExecutionContext,
+  ): Promise<Response> {
+    const expectedAuth = `Basic ${btoa(`admin:${env.BASIC_AUTH_PASSWORD}`)}`
+    const pathname = new URL(request.url).pathname
+    if (
+      request.headers.get('Authorization') !== expectedAuth &&
+      !pathname.startsWith('/public/')
+    ) {
+      return new Response('Unauthorized', {
+        status: 401,
+        headers: {
+          'WWW-Authenticate': 'Basic realm="No access"',
+        },
+      })
     }
-  } else {
-    const { fastifyPromise } = require('./fastify')
-    return async () => fastifyPromise
-  }
-})()
 
-const server = http.createServer(async (req, res) => {
-  try {
-    const fastify = await getFastify()
-    await fastify.ready()
-    fastify.server.emit('request', req, res)
-  } catch (error: any) {
-    console.error(error)
-    res.statusCode = 500
-    res.setHeader('Content-Type', 'text/plain')
-    res.end(String(error?.stack || error))
-  }
-})
-
-const port = 18023
-server.listen(port, '127.0.0.1', () => {
-  console.log(`==> http://localhost:${port}`)
-})
+    envMap.set(request, env)
+    return await app.fetch(request)
+  },
+}

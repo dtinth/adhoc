@@ -1,14 +1,13 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import { format } from 'util'
-import { html, Html } from 'tagged-hypertext'
-export { html, Html } from 'tagged-hypertext'
+import { Html, html } from '@thai/html'
+import { format } from 'node:util'
+export { html, type Html } from '@thai/html'
 
 interface ViewContext {
-  /** Access the raw Fastify request object. */
-  request: FastifyRequest
-
   /** Title of the page. Change this property to customize the page title and header. */
   title: string
+
+  /** HTTP status code. Default is 200. Change this property to set a different status code. */
+  status: number
 
   /** Display something on the page. */
   add: (...v: Html[]) => void
@@ -18,47 +17,26 @@ interface ViewContext {
 
   /** Redirect to another page. Should be used with the `return` keyword. */
   redirect: (p: string) => void
-
-  /** Get the parameter from `params`, `body`, and `query` (in that order). */
-  param: (name: string) => string | undefined
-
-  /** Get the parameter from `params`, `body`, and `query` (in that order). Throws an error if not found. */
-  requiredParam: (name: string) => string
 }
 
 export function view(f: (context: ViewContext) => Promise<Html | void>) {
-  return async (request: FastifyRequest, reply: FastifyReply) => {
-    reply.type('text/html')
+  return (async () => {
     const output: Html[] = []
     const log: string[] = []
-    let gone = false
+
+    let redirectTarget: string | undefined
+
     const context: ViewContext = {
-      request: request,
       redirect: (p: string) => {
-        reply.redirect(p)
-        gone = true
+        redirectTarget = p
       },
-      title: request.routerMethod + ' ' + request.routerPath,
+      title: 'Adhoc',
+      status: 200,
       add: (...v: Html[]) => output.push(...v),
       debug: (...a: any[]) => {
         const str = format(...a)
         log.push(str)
-        request.log.debug(str)
-      },
-      param: (name) => {
-        return (
-          (request.params as any)[name] ||
-          ((request.body as any) || {})[name] ||
-          (request.query as any)[name] ||
-          undefined
-        )
-      },
-      requiredParam: (name) => {
-        const value = context.param(name)
-        if (value === undefined) {
-          throw new Error(`Missing parameter: ${name}`)
-        }
-        return value
+        console.log('debug:', str)
       },
     }
     try {
@@ -76,6 +54,15 @@ export function view(f: (context: ViewContext) => Promise<Html | void>) {
       )
     }
 
+    if (redirectTarget) {
+      return new Response(null, {
+        status: 302,
+        headers: {
+          Location: redirectTarget,
+        },
+      })
+    }
+
     const outputHtml = html`<!DOCTYPE html>
       <html lang="en">
         <head>
@@ -87,9 +74,9 @@ export function view(f: (context: ViewContext) => Promise<Html | void>) {
           />
           <title>${context.title}</title>
           <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
             rel="stylesheet"
-            integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
             crossorigin="anonymous"
           />
         </head>
@@ -99,12 +86,19 @@ export function view(f: (context: ViewContext) => Promise<Html | void>) {
             ${output}
           </div>
           <script src="https://code.iconify.design/iconify-icon/1.0.2/iconify-icon.min.js"></script>
+          <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"
+          ></script>
         </body>
       </html>`
-    if (!gone) {
-      reply.send(outputHtml.toHtml())
-    }
-  }
+    return new Response(outputHtml.toHtml(), {
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+      },
+    })
+  })()
 }
 
 export namespace ui {

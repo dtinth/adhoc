@@ -53,3 +53,10 @@ yarn-error.log*
 .env
 .private
 .data
+
+# wrangler project
+
+.dev.vars
+.wrangler/
+
+*.local

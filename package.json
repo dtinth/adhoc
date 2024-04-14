@@ -1,26 +1,18 @@
 {
   "dependencies": {
-    "@dtinth/encrypted": "^0.3.1",
-    "@fastify/basic-auth": "^5.0.0",
-    "@fastify/cors": "^8.2.0",
-    "@fastify/formbody": "^7.4.0",
-    "@fastify/static": "^6.6.0",
-    "@types/node": "^18.11.13",
-    "dotenv": "^16.0.3",
-    "fastify": "^4.10.2",
-    "lodash-es": "^4.17.21",
-    "pino-pretty": "^9.1.1",
-    "tagged-hypertext": "^1.0.1",
-    "vite": "^4.0.0"
+    "@thai/html": "npm:@jsr/thai__html@^0.0.4",
+    "elysia": "^1.0.10",
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
-    "@tsconfig/node18": "^1.0.1",
-    "@types/lodash-es": "^4.17.6",
-    "tsx": "^3.12.1",
-    "typescript": "^4.9.4"
+    "@cloudflare/vitest-pool-workers": "^0.1.19",
+    "@cloudflare/workers-types": "^4.20240405.0",
+    "typescript": "^5.0.4",
+    "wrangler": "^3.50.0"
   },
   "scripts": {
-    "dev": "tsx watch src/main.ts",
-    "start": "tsx watch src/main.ts"
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev"
   }
 }
