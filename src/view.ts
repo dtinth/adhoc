@@ -40,8 +40,15 @@ export function view(f: (context: ViewContext) => Promise<Html | void>) {
       },
     }
     try {
-      output.push(html`${await f(context)}`.toHtml())
+      const result = await f(context)
+      if (result instanceof Response) {
+        return result
+      }
+      output.push(html`${result}`.toHtml())
     } catch (error: any) {
+      if (error instanceof Response) {
+        return error
+      }
       output.push(ui.pre(error.stack))
     }
 

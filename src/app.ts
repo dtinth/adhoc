@@ -1,4 +1,5 @@
 import { Elysia, t } from 'elysia'
+import { ofetch } from 'ofetch'
 import { getEnv } from './env'
 import { html, ui, view } from './view'
 
@@ -25,12 +26,10 @@ export const app = new Elysia({ aot: false })
   )
   .get('/quote', async () =>
     view(async (v) => {
-      const response = await fetch('https://api.quotable.io/random')
-      v.debug(response.status, response.statusText)
-      const data = (await response.json()) as {
+      const data = await ofetch<{
         content: string
         author: string
-      }
+      }>('https://api.quotable.io/random')
       v.debug(data)
       v.add(html`<figure class="mt-4">
         <blockquote class="blockquote">
@@ -39,7 +38,7 @@ export const app = new Elysia({ aot: false })
         <figcaption class="blockquote-footer">
           <cite>${data.author}</cite>
         </figcaption>
-      </figure> `)
+      </figure>`)
     }),
   )
   .get('/crash', async () =>
